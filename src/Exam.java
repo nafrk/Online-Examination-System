@@ -9,3 +9,4 @@ public class Exam {
         this.duration = duration;
     }
 }
+
