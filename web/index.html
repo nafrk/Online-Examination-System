@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Exam System – Login</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      border-radius: 22px;
+      padding: 34px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .roles {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .role {
+      flex: 1;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1.5px solid var(--border);
+      background: var(--surface-2);
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      color: var(--primary);
+    }
+
+    .role.active {
+      background: var(--primary);
+      border-color: transparent;
+      color: #ffffff;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .action {
+      flex: 1;
+      padding: 12px 0;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      font-weight: 700;
+      background: var(--surface-2);
+      color: var(--primary);
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .action.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .field input {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      font-size: 14px;
+      background: var(--surface-2);
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(31, 111, 122, 0.18);
+    }
+
+    .primary {
+      width: 100%;
+      padding: 15px;
+      border-radius: 16px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 10px 20px rgba(31, 111, 122, 0.22);
+      transition: background 0.2s ease;
+    }
+
+    .primary:hover {
+      background: var(--primary-600);
+    }
+
+    .message {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container card">
+    <div class="title">Online Exam System</div>
+    <div class="subtitle">Secure access to your exams</div>
+
+    <div class="roles">
+      <div class="role" onclick="selectRole('admin', this)">Admin</div>
+      <div class="role" onclick="selectRole('instructor', this)">Instructor</div>
+      <div class="role" onclick="selectRole('student', this)">Student</div>
+    </div>
+
+    <div class="actions" id="actions" style="display:none;">
+      <button class="action" onclick="selectAction('login', this)">Login</button>
+      <button class="action" onclick="selectAction('register', this)">Register</button>
+    </div>
+
+    <form id="authForm" method="post" action="student">
+      <div class="field" id="idField" style="display:none;">
+        <label>ID</label>
+        <input type="text" id="userId" name="id" placeholder="Enter your ID" />
+      </div>
+
+      <div class="field" id="nameField" style="display:none;">
+        <label>Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" />
+      </div>
+
+      <div class="field" id="passwordField" style="display:none;">
+        <label>Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" />
+      </div>
+
+      <input type="hidden" name="mode" id="mode" />
+
+      <button type="button" class="primary" id="submitBtn" style="display:none;" onclick="submitForm()">Continue</button>
+    </form>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    let role = '';
+    let action = '';
+
+    function selectRole(r, el) {
+      role = r;
+      document.querySelectorAll('.role').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+
+      document.getElementById('actions').style.display = r === 'admin' ? 'none' : 'flex';
+
+      resetForm();
+
+      if (r === 'admin') {
+        action = 'login';
+        showLogin();
+      }
+    }
+
+    function selectAction(a, el) {
+      action = a;
+      document.querySelectorAll('.action').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+
+      resetForm();
+
+      if (a === 'login') showLogin();
+      if (a === 'register') showRegister();
+    }
+
+    function showLogin() {
+      document.getElementById('idField').style.display = 'block';
+      document.getElementById('passwordField').style.display = 'block';
+      document.getElementById('submitBtn').style.display = 'block';
+      document.getElementById('submitBtn').innerText = 'Login';
+    }
+
+    function showRegister() {
+      document.getElementById('idField').style.display = 'block';
+      document.getElementById('nameField').style.display = 'block';
+      document.getElementById('passwordField').style.display = 'block';
+      document.getElementById('submitBtn').style.display = 'block';
+      document.getElementById('submitBtn').innerText = 'Register';
+    }
+
+    function resetForm() {
+      document.getElementById('idField').style.display = 'none';
+      document.getElementById('nameField').style.display = 'none';
+      document.getElementById('passwordField').style.display = 'none';
+      document.getElementById('submitBtn').style.display = 'none';
+      document.getElementById('message').innerText = '';
+    }
+
+    function submitForm() {
+      const form = document.getElementById('authForm');
+      const modeInput = document.getElementById('mode');
+      const msgEl = document.getElementById('message');
+
+      if (!role) {
+        msgEl.textContent = 'Please select a role first.';
+        msgEl.style.color = '#dc2626';
+        return;
+      }
+
+      if (role === 'student' || role === 'instructor') {
+        modeInput.value = (action === 'register') ? 'register' : 'login';
+      } else if (role === 'admin') {
+        modeInput.value = 'login';
+      }
+
+      if (role === 'student') {
+        form.action = 'student';
+      } else if (role === 'instructor') {
+        form.action = 'instructor';
+      } else if (role === 'admin') {
+        form.action = 'admin';
+      }
+
+      form.submit();
+    }
+
+    function showStatusFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const msgEl = document.getElementById('message');
+      const error = params.get('error');
+      const registered = params.get('registered');
+
+      if (registered === '1') {
+        msgEl.textContent = 'Registration successful. You can now log in.';
+        msgEl.style.color = '#16a34a';
+      } else if (error) {
+        msgEl.style.color = '#dc2626';
+        if (error === 'missingId') {
+          msgEl.textContent = 'Please enter your ID.';
+        } else if (error === 'badId') {
+          msgEl.textContent = 'ID must be a valid number.';
+        } else if (error === 'register') {
+          msgEl.textContent = 'Could not register student. Maybe this ID is already used.';
+        } else if (error === 'login') {
+          msgEl.textContent = 'Invalid ID or password.';
+        } else {
+          msgEl.textContent = 'Something went wrong.';
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', showStatusFromQuery);
+  </script>
+</body>
+</html>
