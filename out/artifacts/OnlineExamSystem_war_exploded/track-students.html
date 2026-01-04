@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Students & Performance</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    h2 {
+      color: var(--text);
+    }
+
+    table {
+      width: 100%;
+      max-width: 750px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: center;
+      color: var(--text);
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: var(--input-bg);
+    }
+
+    button {
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    /* Back button hover visibility */
+    .back-btn {
+      opacity: 0;
+    }
+
+    .back-btn:hover {
+      opacity: 1;
+    }
+
+    .back-wrapper:hover .back-btn {
+      opacity: 1;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Track Students</h2>
+
+  <!-- STUDENT LIST -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Registered</th>
+      </tr>
+    </thead>
+    <tbody id="studentsBody"></tbody>
+  </table>
+
+  <!-- VIEW PERFORMANCE -->
+  <button onclick="togglePerformance()">View Performance</button>
+
+  <!-- BACK BUTTON (DEFAULT POSITION) -->
+  <div id="backContainer" class="back-wrapper">
+    <button class="back-btn" onclick="goBack()">Back to Dashboard</button>
+  </div>
+
+  <!-- PERFORMANCE SECTION -->
+  <div id="performanceSection" class="hidden">
+    <h2>Registered Students Performance</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Total Exams</th>
+          <th>Average Score</th>
+          <th>Max Score</th>
+        </tr>
+      </thead>
+      <tbody id="performanceBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const students = [
+      { id: "S001", name: "John Doe", registered: true, exams: 5, avg: 86, max: 98 },
+      { id: "S002", name: "Jane Smith", registered: false },
+      { id: "S003", name: "Michael Lee", registered: true, exams: 3, avg: 78, max: 90 },
+      { id: "S004", name: "Emily Brown", registered: false },
+      { id: "S005", name: "Sarah Johnson", registered: true, exams: 4, avg: 91, max: 100 }
+    ];
+
+    const studentBody = document.getElementById("studentsBody");
+    const perfBody = document.getElementById("performanceBody");
+    const perfSection = document.getElementById("performanceSection");
+    const backContainer = document.getElementById("backContainer");
+
+    students.forEach(s => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${s.id}</td>
+        <td>${s.name}</td>
+        <td>${s.registered ? "Yes" : "No"}</td>
+      `;
+      studentBody.appendChild(row);
+    });
+
+    function togglePerformance() {
+      if (!perfSection.classList.contains("hidden")) {
+        perfSection.classList.add("hidden");
+        document.body.insertBefore(backContainer, perfSection);
+        return;
+      }
+
+      perfBody.innerHTML = "";
+
+      students.filter(s => s.registered).forEach(s => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${s.id}</td>
+          <td>${s.name}</td>
+          <td>${s.exams}</td>
+          <td>${s.avg}</td>
+          <td>${s.max}</td>
+        `;
+        perfBody.appendChild(row);
+      });
+
+      perfSection.classList.remove("hidden");
+      perfSection.after(backContainer);
+    }
+
+    function goBack() {
+      window.location.href = "instructor.html";
+    }
+  </script>
+
+</body>
+</html>

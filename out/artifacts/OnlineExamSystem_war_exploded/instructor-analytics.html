@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instructor Performance</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 520px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .metric-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .metric-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+    }
+
+    .metric-value {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <div class="container card">
+    <h2>Instructor Performance</h2>
+
+    <ul class="metric-list">
+      <li>
+        <span class="metric-label">Total Exams in System</span>
+        <span class="metric-value" id="totalExams">-</span>
+      </li>
+      <li>
+        <span class="metric-label">Total Bonus Questions</span>
+        <span class="metric-value" id="bonusQuestions">-</span>
+      </li>
+    </ul>
+
+    <div class="footer-actions">
+      <button class="btn" onclick="goBack()">Back to Instructor Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = 'instructor.html';
+    }
+
+    async function loadInstructorAnalytics() {
+      try {
+        const res = await fetch('instructor-analytics');
+
+        if (res.status === 401) {
+          alert('Your session has expired. Please log in again.');
+          window.location.href = 'index.html';
+          return;
+        }
+
+        if (!res.ok) {
+          console.error('Failed to load instructor analytics');
+          return;
+        }
+
+        const data = await res.json();
+        document.getElementById('totalExams').textContent = data.totalExams;
+        document.getElementById('bonusQuestions').textContent = data.bonusQuestions;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadInstructorAnalytics);
+  </script>
+</body>
+</html>

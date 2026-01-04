@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take Exam</title>
+<link rel="stylesheet" href="theme.css" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* hide body scroll */
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* full viewport height */
+    width: 95%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    word-break: break-word;
+    color: var(--text);
+  }
+
+  .exam-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exam-list button {
+    padding: 14px;
+    font-size: 16px;
+    border: none;
+    border-radius: 14px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    font-weight: 800;
+    transition: background 0.2s ease;
+  }
+
+  .exam-list button:hover { background: var(--primary-600); }
+
+  #examContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #questionsContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+
+  .question {
+    margin-bottom: 20px;
+  }
+
+  .question h4 { margin-bottom: 8px; }
+  .question input[type="radio"] { margin-right: 6px; }
+
+  #timer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+    font-weight: 800;
+    background: var(--warning);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.14);
+  }
+
+  #nextBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 14px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 14px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    display: none;
+    font-weight: 800;
+    z-index: 1000;
+    transition: background 0.2s ease;
+    box-shadow: 0 12px 28px rgba(31, 111, 122, 0.22);
+  }
+
+  #nextBtn:hover {
+    background: var(--primary-600);
+  }
+
+  .message {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 800;
+    color: var(--danger);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container card">
+  <h2>Available Exams</h2>
+  <div class="message" id="message"></div>
+  <div id="examList" class="exam-list"></div>
+
+  <div id="examContainer" class="hidden">
+    <h3 id="examTitle" class="hidden"></h3>
+    <div id="questionsContainer"></div>
+  </div>
+</div>
+
+<div id="timer">00:00</div>
+<button id="nextBtn">Next</button>
+
+<script>
+  const examListDiv = document.getElementById('examList');
+  const examContainer = document.getElementById('examContainer');
+  const examTitleEl = document.getElementById('examTitle');
+  const questionsContainer = document.getElementById('questionsContainer');
+  const nextBtn = document.getElementById('nextBtn');
+  const timerEl = document.getElementById('timer');
+  const messageEl = document.getElementById('message');
+
+  let currentExam = null; // { id, title, duration, questions: [...] }
+  let currentPage = 0;
+  let totalPages = 0;
+  let answers = {}; // questionId -> answer text
+  let timerInterval;
+  let remainingSeconds;
+
+  // Load list of active exams from the backend (ExamsServlet at /exams-data)
+  async function loadExams() {
+    try {
+      const res = await fetch('exams-data');
+      if (!res.ok) {
+        messageEl.textContent = 'Failed to load exams';
+        return;
+      }
+      const exams = await res.json();
+
+      examListDiv.innerHTML = '';
+      currentExam = null;
+      currentPage = 0;
+      totalPages = 0;
+      answers = {};
+      messageEl.textContent = '';
+
+      if (!exams || exams.length === 0) {
+        messageEl.textContent = 'No active exams available right now.';
+        return;
+      }
+
+      exams.forEach(exam => {
+        const btn = document.createElement('button');
+        btn.textContent = `${exam.title} (${exam.duration} min)`;
+        btn.onclick = () => startExam(exam);
+        examListDiv.appendChild(btn);
+      });
+    } catch (e) {
+      console.error(e);
+      messageEl.textContent = 'Failed to load exams';
+    }
+  }
+
+  // When the user chooses an exam, load its questions from /exam-questions
+  async function startExam(examMeta) {
+    try {
+      const res = await fetch(`exam-questions?examId=${encodeURIComponent(examMeta.id)}`);
+      if (!res.ok) {
+        messageEl.textContent = 'Failed to load questions for this exam.';
+        return;
+      }
+      const questions = await res.json();
+      if (!questions || questions.length === 0) {
+        messageEl.textContent = 'No questions found for this exam.';
+        return;
+      }
+
+      currentExam = {
+        id: examMeta.id,
+        title: examMeta.title,
+        duration: examMeta.duration,
+        questions: questions
+      };
+      currentPage = 0;
+      totalPages = Math.ceil(currentExam.questions.length / 5);
+      answers = {};
+      messageEl.textContent = '';
+
+      examListDiv.classList.add('hidden');
+      examContainer.classList.remove('hidden');
+      examTitleEl.textContent = currentExam.title;
+      examTitleEl.classList.remove('hidden');
+      nextBtn.style.display = 'block';
+
+      if (currentExam.duration && currentExam.duration > 0) {
+        timerEl.style.display = 'block';
+        startTimer(currentExam.duration * 60);
+      } else {
+        timerEl.style.display = 'none';
+      }
+
+      showPage();
+    } catch (e) {
+      console.error(e);
+      messageEl.textContent = 'Failed to load questions for this exam.';
+    }
+  }
+
+  function startTimer(seconds) {
+    remainingSeconds = seconds;
+    updateTimer();
+    timerInterval = setInterval(() => {
+      remainingSeconds--;
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        alert("Time's up! Submitting exam...");
+        submitExam();
+        return;
+      }
+      updateTimer();
+    }, 1000);
+  }
+
+  function updateTimer() {
+    const mins = Math.floor(remainingSeconds / 60);
+    const secs = remainingSeconds % 60;
+    timerEl.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+  }
+
+  function showPage() {
+    questionsContainer.innerHTML = '';
+    const start = currentPage * 5;
+    const end = Math.min(start + 5, currentExam.questions.length);
+    for (let i = start; i < end; i++) {
+      const q = currentExam.questions[i];
+      const div = document.createElement('div');
+      div.classList.add('question');
+      const existing = answers[q.id] || '';
+      div.innerHTML = `
+        <h4>Q${i+1}: ${q.text}</h4>
+        <input type="text" class="answerInput" data-qid="${q.id}" value="${existing.replace(/"/g, '&quot;')}">
+      `;
+      questionsContainer.appendChild(div);
+    }
+    nextBtn.textContent = (currentPage === totalPages - 1) ? "Submit" : "Next";
+    questionsContainer.scrollTop = 0;
+  }
+
+  nextBtn.onclick = () => {
+    const inputs = document.querySelectorAll('.answerInput');
+    inputs.forEach(input => {
+      const qid = parseInt(input.getAttribute('data-qid'));
+      if (!isNaN(qid)) {
+        answers[qid] = input.value || '';
+      }
+    });
+
+    if (currentPage < totalPages - 1) {
+      currentPage++;
+      showPage();
+    } else {
+      submitExam();
+    }
+  }
+
+  async function submitExam() {
+    if (!currentExam) return;
+    clearInterval(timerInterval);
+    try {
+      const params = new URLSearchParams();
+      params.append('examId', currentExam.id);
+      currentExam.questions.forEach(q => {
+        params.append('q_' + q.id, answers[q.id] || '');
+      });
+
+      const res = await fetch('submit-exam', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      });
+
+      if (res.status === 401) {
+        alert('Your session expired. Please log in again.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const data = await res.json();
+      if (data.ok) {
+        alert('Exam submitted! Your score: ' + data.score);
+      } else {
+        alert('Failed to submit exam. Maybe you already took it.');
+      }
+      window.location.href = 'student.html';
+    } catch (e) {
+      console.error(e);
+      alert('Error submitting exam');
+      window.location.href = 'student.html';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', loadExams);
+</script>
+
+</body>
+</html>

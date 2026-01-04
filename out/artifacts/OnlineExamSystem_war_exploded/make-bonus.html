@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make Question Bonus</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    .back {
+      background: var(--secondary);
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--success);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+    <h2>Make Question Bonus</h2>
+
+    <label for="questionId">Question ID</label>
+    <input
+      type="text"
+      id="questionId"
+      placeholder="Enter question ID"
+    />
+
+    <button onclick="markBonus()">Mark as Bonus</button>
+    <button class="back" onclick="goBack()">Back to Dashboard</button>
+
+    <div id="successMsg" class="success">
+      Question marked as bonus for all students
+    </div>
+  </div>
+
+  <script>
+    function markBonus() {
+      const questionId = document.getElementById("questionId").value.trim();
+      const successMsg = document.getElementById("successMsg");
+
+      if (questionId === "") {
+        alert("Please enter question ID");
+        return;
+      }
+
+      /*
+        BACKEND INTEGRATION (later):
+        Send questionId to server
+        -> update question set bonus = true
+      */
+
+      // Mock success response
+      successMsg.style.display = "block";
+
+      // Optional clear
+      document.getElementById("questionId").value = "";
+    }
+
+    function goBack() {
+      window.location.href = "instructor.html";
+    }
+  </script>
+</body>
+</html>

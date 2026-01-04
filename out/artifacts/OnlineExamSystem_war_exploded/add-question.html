@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Question</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      background: var(--input-bg);
+      color: var(--text);
+      resize: none;
+    }
+
+    textarea {
+      min-height: 80px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    .back {
+      background: var(--secondary);
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--success);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+    <h2>Add Question</h2>
+
+    <label for="examId">Exam ID</label>
+    <input
+      type="text"
+      id="examId"
+      placeholder="Enter exam ID"
+    />
+
+    <label for="question">Question</label>
+    <textarea
+      id="question"
+      placeholder="Enter the question"
+    ></textarea>
+
+    <label for="answer">Correct Answer</label>
+    <input
+      type="text"
+      id="answer"
+      placeholder="Enter correct answer"
+    />
+
+    <label for="explanation">Explanation</label>
+    <textarea
+      id="explanation"
+      placeholder="Enter explanation (optional)"
+    ></textarea>
+
+    <button onclick="addQuestion()">Add Question</button>
+    <button class="back" onclick="goBack()">Back to Dashboard</button>
+
+    <div id="successMsg" class="success">
+      Question added successfully
+    </div>
+  </div>
+
+  <script>
+    function addQuestion() {
+      const examId = document.getElementById("examId").value.trim();
+      const question = document.getElementById("question").value.trim();
+      const answer = document.getElementById("answer").value.trim();
+      const explanation = document.getElementById("explanation").value.trim();
+      const successMsg = document.getElementById("successMsg");
+
+      if (examId === "" || question === "" || answer === "") {
+        alert("Please fill in all required fields");
+        return;
+      }
+
+      /*
+        BACKEND INTEGRATION (later):
+        Send data to server:
+        examId, question, answer, explanation
+        via fetch / servlet / spring controller
+      */
+
+      // Mock success
+      successMsg.style.display = "block";
+
+      // Optional reset
+      document.getElementById("examId").value = "";
+      document.getElementById("question").value = "";
+      document.getElementById("answer").value = "";
+      document.getElementById("explanation").value = "";
+    }
+
+    function goBack() {
+    // Go back to instructor dashboard
+    window.location.href = "instructor.html";
+  }
+  </script>
+</body>
+</html>

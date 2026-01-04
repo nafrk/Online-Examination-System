@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instructor Performance</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .stat {
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 14px;
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    /* Back button behavior same as other instructor pages */
+    .back-wrapper {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+    <h2>Instructor Performance</h2>
+
+    <!-- MOCK PERFORMANCE DATA -->
+    <div class="stat">
+      Exams Created: <strong id="examCount">6</strong>
+    </div>
+
+    <div class="stat">
+      Bonus Questions Approved: <strong id="bonusCount">14</strong>
+    </div>
+
+    <div class="back-wrapper">
+      <button onclick="goBack()">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    /*
+      Backend integration point:
+      Fetch instructor stats here and update examCount & bonusCount
+    */
+
+    function goBack() {
+      window.location.href = "instructor.html";
+    }
+  </script>
+</body>
+</html>

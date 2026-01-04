@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    .logout {
+      background: var(--danger);
+    }
+
+    .logout:hover {
+      filter: brightness(0.95);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+    <h2>Admin Dashboard</h2>
+
+    <button onclick="createExam()">Create Exam</button>
+    <button onclick="addQuestion()">Add Question</button>
+    <button onclick="addInstructor()">Add Instructor</button>
+    <button onclick="viewAllUsers()">View All Users</button>
+    <button onclick="viewAnalytics()">View Performance Analytics</button>
+
+    <button class="logout" onclick="logout()">Log Out</button>
+  </div>
+
+  <script>
+    function createExam() {
+      window.location.href = "create-exam.html";
+    }
+
+    function addQuestion() {
+      window.location.href = "add-question.html";
+    }
+
+    function addInstructor() {
+      window.location.href = "add-instructor.html";
+    }
+
+    function viewAllUsers() {
+      window.location.href = "view-users.html";
+    }
+
+    function viewAnalytics() {
+      window.location.href = "performance-analytics.html";
+    }
+
+    function logout() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

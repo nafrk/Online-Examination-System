@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Student</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    .back {
+      background: var(--secondary);
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--success);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+    <h2>Add Student</h2>
+
+    <label for="studentId">Student ID</label>
+    <input
+      type="text"
+      id="studentId"
+      placeholder="Enter student ID"
+    />
+
+    <label for="studentName">Student Name</label>
+    <input
+      type="text"
+      id="studentName"
+      placeholder="Enter student name"
+    />
+
+    <label for="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      placeholder="Enter password"
+    />
+
+    <button onclick="addStudent()">Add Student</button>
+    <button class="back" onclick="goBack()">Back to Dashboard</button>
+
+    <div id="successMsg" class="success"></div>
+  </div>
+
+  <script>
+    function addStudent() {
+      const id = document.getElementById("studentId").value.trim();
+      const name = document.getElementById("studentName").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const successMsg = document.getElementById("successMsg");
+
+      if (id === "" || name === "" || password === "") {
+        alert("Please fill in all fields");
+        return;
+      }
+
+      /*
+        BACKEND INTEGRATION (later):
+        Send studentId, name, password
+        - hash password
+        - insert into database
+      */
+
+      // Mock success message
+      successMsg.textContent = "Student added with ID: " + id;
+      successMsg.style.display = "block";
+
+      // Optional reset
+      document.getElementById("studentId").value = "";
+      document.getElementById("studentName").value = "";
+      document.getElementById("password").value = "";
+    }
+
+    function goBack() {
+      window.location.href = "instructor.html";
+    }
+  </script>
+</body>
+</html>

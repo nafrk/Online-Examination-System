@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Results</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 520px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .footer-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <div class="container card">
+    <h2>Exam Results</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Exam</th>
+          <th>Date</th>
+          <th>Score</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody">
+      </tbody>
+    </table>
+
+    <div class="footer-actions">
+      <button class="btn" onclick="goBack()">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = 'student.html';
+    }
+
+    async function loadResults() {
+      try {
+        const res = await fetch('results-data');
+
+        if (res.status === 401) {
+          alert('Your session has expired. Please log in again.');
+          window.location.href = 'index.html';
+          return;
+        }
+
+        if (!res.ok) {
+          console.error('Failed to load results');
+          return;
+        }
+
+        const data = await res.json();
+        const tbody = document.getElementById('resultsBody');
+        tbody.innerHTML = '';
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${row.exam}</td>
+            <td>${row.date || ''}</td>
+            <td>${row.score}</td>
+            <td>${row.status}</td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadResults);
+  </script>
+</body>
+</html>
