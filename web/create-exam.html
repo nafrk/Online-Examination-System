@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Exam</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    .back {
+      background: var(--secondary);
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--success);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+    <h2>Create Exam</h2>
+
+    <label for="examTitle">Exam Title</label>
+    <input
+      type="text"
+      id="examTitle"
+      placeholder="Enter exam title"
+    />
+
+    <label for="duration">Duration (minutes)</label>
+    <input
+      type="number"
+      id="duration"
+      placeholder="Enter duration"
+      min="1"
+    />
+
+    <button onclick="createExam()">Create Exam</button>
+    <button class="back" onclick="goBack()">Back to Dashboard</button>
+
+    <div id="successMsg" class="success">
+      Exam created successfully
+    </div>
+  </div>
+
+  <script>
+    function createExam() {
+      const title = document.getElementById("examTitle").value.trim();
+      const duration = document.getElementById("duration").value.trim();
+      const successMsg = document.getElementById("successMsg");
+
+      if (title === "" || duration === "") {
+        alert("Please fill in all fields");
+        return;
+      }
+
+      /*
+        BACKEND CONNECTION (later):
+        Send title & duration using:
+        fetch("/createExam", { method: "POST", body: ... })
+        or Java Servlet / Spring Boot
+      */
+
+      // Mock success response
+      successMsg.style.display = "block";
+
+      // Optional: clear inputs
+      document.getElementById("examTitle").value = "";
+      document.getElementById("duration").value = "";
+    }
+
+    function goBack() {
+      window.location.href = "instructor.html";
+    }
+  </script>
+</body>
+</html>

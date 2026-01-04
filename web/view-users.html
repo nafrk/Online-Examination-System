@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Users</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 900px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    th {
+      font-weight: 800;
+      background: var(--input-bg);
+    }
+
+    tr:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .yes {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .no {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    /* Back to Dashboard button: initially white, gradient appears on hover */
+    .back-btn {
+      width: 260px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 2px solid var(--primary);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--primary);
+      background: white;
+      display: block;
+      margin: 0 auto;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background: linear-gradient(135deg, var(--primary), var(--primary-600));
+      color: white;
+      box-shadow:
+        0 0 10px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(0, 0, 0, 0.1),
+        0 0 30px var(--primary);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+
+    <!-- Instructors -->
+    <h2>Instructors</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Approved</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>INS001</td>
+          <td>Dr. Alemayehu</td>
+          <td class="yes">Yes</td>
+        </tr>
+        <tr>
+          <td>INS002</td>
+          <td>Ms. Sara</td>
+          <td class="no">No</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Students -->
+    <h2>Students</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Registered</th>
+          <th>Instructor ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>STU101</td>
+          <td>Nahom Eren</td>
+          <td class="yes">Yes</td>
+          <td>INS001</td>
+        </tr>
+        <tr>
+          <td>STU102</td>
+          <td>Hanna Bekele</td>
+          <td class="no">No</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="back-btn" onclick="goBack()">Back to Dashboard</button>
+
+<style>
+  /* Initially invisible button */
+  .back-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    color: transparent;      /* text hidden */
+    background: transparent; /* invisible */
+    position: relative;
+    transition:
+      background 0.3s ease,
+      color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.2s ease;
+  }
+
+  /* Reveal gradient + glow when hovering over its position */
+  .back-btn:hover {
+    background: linear-gradient(135deg, var(--primary), var(--primary-600));
+    color: white;
+    box-shadow:
+      0 0 10px rgba(0,0,0,0.15),
+      0 0 20px rgba(0,0,0,0.1),
+      0 0 30px var(--primary);
+    transform: translateY(-2px);
+  }
+</style>
+
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "admin.html";
+    }
+  </script>
+</body>
+</html>

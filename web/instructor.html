@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instructor Dashboard</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 18px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-600);
+    }
+
+    .logout {
+      background: var(--danger);
+    }
+
+    .logout:hover {
+      filter: brightness(0.95);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container card">
+    <h2>Instructor Dashboard</h2>
+
+    <button onclick="createExam()">Create Exam</button>
+    <button onclick="addQuestion()">Add Question</button>
+    <button onclick="makeBonus()">Make Question Bonus</button>
+    <button onclick="addStudents()">Add Students</button>
+    <button onclick="trackStudents()">Track Students & Performance</button>
+    <button onclick="viewInstructorPerformance()">View Instructor Performance</button>
+
+    <button class="logout" onclick="logout()">Log Out</button>
+  </div>
+
+  <script>
+    function createExam() {
+      window.location.href = "create-exam.html";
+    }
+
+    function addQuestion() {
+      window.location.href = "add-question.html";
+    }
+
+    function makeBonus() {
+      window.location.href = "make-bonus.html";
+    }
+
+    function addStudents() {
+      window.location.href = "add-students.html";
+    }
+
+    function trackStudents() {
+      window.location.href = "track-students.html";
+    }
+
+    function viewInstructorPerformance() {
+      window.location.href = "instructor-performance.html";
+    }
+
+    function logout() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

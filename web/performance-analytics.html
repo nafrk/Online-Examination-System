@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performance Analytics</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <style>
+    /* ================= PAGE ================= */
+    body {
+      min-height: 100vh;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      font-family: system-ui, sans-serif;
+    }
+
+    .container {
+      width: 1100px;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 22px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--text);
+    }
+
+    /* ================= SECTIONS ================= */
+    .section {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 18px;
+      margin-bottom: 32px;
+    }
+
+    .section h2 {
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      margin-bottom: 14px;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    /* ================= BUTTONS ================= */
+    .view-btn {
+      padding: 12px 20px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 800;
+      background: var(--primary);
+      color: #ffffff;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .view-btn:hover {
+      background: var(--primary-600);
+      transform: translateY(-1px);
+    }
+
+    /* ================= RESULTS ================= */
+    .result {
+      display: none;
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #f9fafb;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ================= TABLE ================= */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 800;
+    }
+
+    /* ================= BACK BUTTON ================= */
+    .back-btn {
+      width: 240px;
+      padding: 14px;
+      margin: 40px auto 0;
+      display: block;
+
+      /* fully invisible initially */
+      background: transparent;
+      color: transparent;
+      border: none;
+      outline: none;
+
+      border-radius: 18px;
+      font-weight: 800;
+      cursor: pointer;
+
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background: var(--primary);   /* SAME AS VIEW */
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Performance Analytics</h1>
+
+    <!-- 1. INDIVIDUAL STUDENT -->
+    <div class="section">
+      <h2>Individual Student Performance</h2>
+
+      <label>Student ID</label>
+      <input type="text" id="studentId" placeholder="Enter student ID" />
+
+      <button class="view-btn" onclick="showStudent()">View</button>
+
+      <div id="studentResult" class="result">
+        Total Exams Taken: 6<br />
+        Average Score: 78%<br />
+        Highest Score: 92%
+      </div>
+    </div>
+
+    <!-- 2. CLASS PERFORMANCE -->
+    <div class="section">
+      <h2>Class Performance</h2>
+
+      <label>Exam ID</label>
+      <input type="text" id="examId" placeholder="Enter exam ID" />
+
+      <button class="view-btn" onclick="showClass()">View</button>
+
+      <div id="classResult" class="result">
+        Total Students: 42<br />
+        Average Class Score: 74%
+      </div>
+    </div>
+
+    <!-- 3. INSTRUCTOR PERFORMANCE -->
+    <div class="section">
+      <h2>Instructor Performance</h2>
+
+      <label>Instructor ID</label>
+      <input type="text" id="instructorPerfId" placeholder="Enter instructor ID" />
+
+      <button class="view-btn" onclick="showInstructor()">View</button>
+
+      <div id="instructorResult" class="result">
+        Instructor ID: INS-12<br />
+        Average Student Score: 81%
+      </div>
+    </div>
+
+    <!-- 4. STUDENTS UNDER INSTRUCTOR -->
+    <div class="section">
+      <h2>All Students Under Instructor</h2>
+
+      <label>Instructor ID</label>
+      <input type="text" id="instructorStudentsId" placeholder="Enter instructor ID" />
+
+      <button class="view-btn" onclick="showStudents()">View</button>
+
+      <div id="studentsResult" class="result">
+        <table>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Total Exams</th>
+            <th>Average Score</th>
+            <th>Max Score</th>
+          </tr>
+          <tr>
+            <td>ST-01</td>
+            <td>John</td>
+            <td>5</td>
+            <td>76%</td>
+            <td>88%</td>
+          </tr>
+          <tr>
+            <td>ST-02</td>
+            <td>Sarah</td>
+            <td>6</td>
+            <td>82%</td>
+            <td>95%</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- BACK TO DASHBOARD -->
+    <button class="back-btn" onclick="goBack()">Back to Dashboard</button>
+
+  </div>
+
+  <script>
+    function showStudent() {
+      document.getElementById("studentResult").style.display = "block";
+    }
+
+    function showClass() {
+      document.getElementById("classResult").style.display = "block";
+    }
+
+    function showInstructor() {
+      document.getElementById("instructorResult").style.display = "block";
+    }
+
+    function showStudents() {
+      document.getElementById("studentsResult").style.display = "block";
+    }
+
+    function goBack() {
+      window.location.href = "admin.html";
+    }
+  </script>
+</body>
+</html>
