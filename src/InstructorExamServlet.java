@@ -51,7 +51,7 @@ public class InstructorExamServlet extends HttpServlet {
 
             // Insert a new exam row. We don't depend on status or instructor_id columns.
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO exam (title, duration) VALUES (?, ?)"
+                 "INSERT INTO exam (title, duration, status) VALUES (?, ?, 'ACTIVE')"
             );
             ps.setString(1, title.trim());
             ps.setInt(2, duration);

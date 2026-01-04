@@ -2,6 +2,7 @@ import java.sql.*;
 
 public class AdminManager {
 
+    // Admin login
     public boolean loginAdmin(int id, String pass) {
         try {
             Connection con = DBConnection.getConnection();
@@ -18,7 +19,7 @@ public class AdminManager {
         }
     }
 
-    // Add instructor with ID 
+    // Add instructor with ID (pre-register)
     public void addInstructor(int id) {
         try {
             Connection con = DBConnection.getConnection();
@@ -33,5 +34,29 @@ public class AdminManager {
         }
     }
 
-}
+    // View all students and instructors
+    public void viewUsers() {
+        try {
+            Connection con = DBConnection.getConnection();
+            Statement st = con.createStatement();
 
+            System.out.println("--- Instructors ---");
+            ResultSet rs1 = st.executeQuery("SELECT * FROM instructor");
+            while(rs1.next()) {
+                System.out.println(rs1.getInt("instructor_id") + " | Name: " + rs1.getString("name") +
+                                   " | Approved: " + rs1.getBoolean("approved"));
+            }
+
+            System.out.println("--- Students ---");
+            ResultSet rs2 = st.executeQuery("SELECT * FROM student");
+            while(rs2.next()) {
+                System.out.println(rs2.getInt("student_id") + " | Name: " + rs2.getString("name") +
+                                   " | Registered: " + rs2.getBoolean("registered") +
+                                   " | Instructor ID: " + rs2.getInt("instructor_id"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

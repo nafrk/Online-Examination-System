@@ -3,12 +3,13 @@ import java.util.Scanner;
 
 public class InstructorManager {
 
-    private int instructorId; 
+    private int instructorId; // store logged-in instructor
+
     public void setInstructorId(int id) {
         this.instructorId = id;
     }
 
-    
+    // Instructor registration (console)
     public void registerInstructor() {
         Scanner sc = new Scanner(System.in);
 
@@ -47,7 +48,9 @@ public class InstructorManager {
         }
     }
 
-    
+    // Web-friendly instructor registration
+    // Behavior: if an instructor row with this ID exists -> UPDATE name/password/approved.
+    //           if no row exists                      -> INSERT a new instructor row.
     public boolean registerInstructor(int id, String name, String pass) {
         if (name == null || name.trim().isEmpty() || pass == null || pass.isEmpty()) {
             return false;
@@ -137,4 +140,24 @@ public class InstructorManager {
         }
     }
 
+    // Track students assigned to this instructor
+    public void trackStudents() {
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM student WHERE instructor_id=?"
+            );
+            ps.setInt(1, this.instructorId);
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("--- Your Students ---");
+            while (rs.next()) {
+                System.out.println(rs.getInt("student_id") + " | Name: " + rs.getString("name") +
+                                   " | Registered: " + rs.getBoolean("registered"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
